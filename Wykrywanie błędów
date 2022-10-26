@@ -1,0 +1,78 @@
+#!/bin/bash
+FILE=Pliki/cities.csv
+echo Linie z błędną liczbą rejestrów:
+awk -F "," '{if(NF!=10){print}}' $FILE
+echo ---------------------------------------------------------------------
+echo Dodatkowo błedu wystąpiły w następujących rejestrach oraz w postaciach: 
+echo ---------------------------------------------------------------------
+exec < $FILE
+read header
+LineNum=2
+while IFS="," read col1 col2 col3 col4 col5 col6 col7 col8 col9 col10
+do
+
+#Wymagana zmiana w lini aby kolumny były traktowane bez spacji
+	col1=$(echo $col1 | sed 's/\r//g')
+	col2=$(echo $col2 | sed 's/\r//g')
+	col3=$(echo $col3 | sed 's/\r//g')
+	col4=$(echo $col4 | sed 's/\r//g')
+	col5=$(echo $col5 | sed 's/\r//g')
+	col6=$(echo $col6 | sed 's/\r//g')
+	col7=$(echo $col7 | sed 's/\r//g')
+	col8=$(echo $col8 | sed 's/\r//g')
+	col9=$(echo $col9 | sed 's/\r//g')
+	col10=$(echo $col10 | sed 's/\r//g')
+
+#sprawdzenie pierszej kolumny
+if ! [[ $col1 =~ ^[0-9]{2}$ || $col1 =~ ^[0-9]{1}$ ]]; then 
+	echo Bląd w lini $LineNum, w kolumnie pierwszej. Wartość błędu: $col1
+fi
+
+#sprawdzanie drugiej kolumny
+if ! [[ $col2 =~ ^[0-9]{2}$ || $col2 =~ ^[0-9]{1}$ ]]; then
+	echo Błąd w lini $LineNum, w kolumnie drugiej. Wartość błędu: $col2
+fi
+
+#sprawdzanie trzeciej kolumny
+if ! [[ $col3 =~ ^[0-9]{2}$ || $col3 =~ ^[0-9]{1}$ ]]; then
+	echo Błąd w lini $LineNum, w kolumnie trzeciej. Wartośc błędu: $col3
+fi
+#sprawdzamoe czwartej kolumny
+if ! [[ "$col4" == *[N]* ]]; then
+	echo Błąd w lini $LineNum, w kolumnie czwartej. Wartość błędu: $col4
+fi
+
+#sprawdzanie piątej kolumny
+if ! [[ $col5 =~ ^[0-9]{3}$ || $col5 =~ ^[0-9]{2}$ || $col5 =~ ^[0-9]{1}$ ]]; then
+	echo Błąd w lini $LineNum, w kolumnie piątej. Wartość błędu: $col5
+fi
+
+#sprawdzanie szóstej kolumny
+if ! [[ $col6 =~ ^[0-9]{3}$ || $col6 =~ ^[0-9]{2}$ || $col6 =~ ^[0-9]{1}$ ]]; then
+	echo Błąd w lini $LineNum, w kolumnie szóstej. Wartość błędu: $col6
+fi
+
+#sprawdzanie siódmej kolumny
+if ! [[ $col7 =~ ^[0-9]{2}$ || $col7 =~ ^[0-9]{1}$ ]]; then
+	echo Błąd w lini $LineNum, w kolumnie siódmej. Wartość błedu: $col7
+fi
+
+#sprawdzanie osmej kolumny
+if ! [[ "$col8" == *[W]* ]]; then
+	echo Błąd w lini $LineNum, w kolumnie ósmej. Wartość błędu: $col8
+fi
+
+#Sprawdzanie dziewiątej kolumny
+Znaki=`echo -n "$col9" | wc -c`
+if (($Znaki < 3)); then
+	echo Błąd w lini $LineNum, w kolumnie dziewiątej. Wartośc błędu: $col9
+fi
+
+#Sprawdzanie dziesiatej kolumny
+Znaki=`echo -n "$col10" | wc -c`
+if (($Znaki !=2)); then
+	echo Błąd w lini $LineNum, w kolumnie dziesiątej. Wartość błędu: $col10
+fi
+LineNum=$((LineNum+1))
+done
+
