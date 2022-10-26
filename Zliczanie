@@ -1,0 +1,28 @@
+#!/bin/bash
+echo ------------------------------ Zad1 --------------------------------------
+FILE1=Pliki/tutor.txt
+FILE2=Pliki/loremipsum.txt
+Zad1_1c=`wc -c $FILE1 | awk '{print $1}'`
+Zad1_2c=`wc -c $FILE2 | awk '{print $1}'`
+Zad1_1w=`wc -w $FILE1 | awk '{print $1}'`
+Zad1_2w=`wc -w $FILE2 | awk '{print $1}'`
+Zad1_1l=`wc -l $FILE1 | awk '{print $1}'`
+Zad1_2l=`wc -l $FILE2 | awk '{print $1}'`
+
+echo Liczba liter w pliku tutor.txt: $Zad1_1c
+echo Liczba liter w pliku loremipsum.txt: $Zad1_2c
+echo Liczba słów w pliku tutor.txt: $Zad1_1w
+echo Liczba słów w pliku loremipsum.txt: $Zad1_2w
+echo Liczba lini w pliku tutor.txt: $Zad1_1l
+echo Liczba lini w pliku loremipsum.txt: $Zad1_2l
+
+echo ------------------------------ Zad2 ---------------------------------------
+awk '{for(w=1;w<NF;w++) print $w}' Pliki/tutor.txt | sort | uniq -c | sort -nr
+echo ---------------------------------------------------------------------------
+awk '{for(w=1;w<NF;w++) print $w}' Pliki/loremipsum.txt | sort | uniq -c | sort -nr
+
+echo ----------------------------- Zad3 ----------------------------------------
+sed 's/[^a-zA-Z1-9]//g' < $FILE1 | fold -w 1 -s | sort | uniq -c | sort -nr
+echo --------------------------------------------------------------------------
+sed 's/[^a-zA-Z1-9]//g' < $FILE2 | fold -w 1 -s | sort | uniq -c | sort -nr
+
